@@ -1,38 +1,41 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using UniRx.Async;
 
 namespace CAFU.Data.Repository
 {
-    public class AsyncDataRepository : IAsyncDataAdapter
+    internal sealed class AsyncDataRepository<T> : IAsyncDataAdapter<T>
+        where T : new()
     {
         private readonly IAsyncCRUDHandler asyncCRUDHandler;
+        private readonly IDataSerializer<T> dataSerializer;
 
-        public AsyncDataRepository(IAsyncCRUDHandler asyncCRUDHandler)
+        public AsyncDataRepository(IAsyncCRUDHandler asyncCRUDHandler, IDataSerializer<T> dataSerializer)
         {
             this.asyncCRUDHandler = asyncCRUDHandler;
+            this.dataSerializer = dataSerializer;
         }
 
-        public async UniTask<IEnumerable<byte>> LoadAsync(Uri uri, CancellationToken cancellationToken = default)
+        public async UniTask<T> LoadAsync(Uri uri, CancellationToken cancellationToken = default)
         {
+            T data = default;
             if (await asyncCRUDHandler.ExistsAsync(uri, cancellationToken))
             {
-                return await asyncCRUDHandler.ReadAsync(uri, cancellationToken);
+                data = dataSerializer.Serialize(await asyncCRUDHandler.ReadAsync(uri, cancellationToken));
             }
 
-            return new byte[0];
+            return data != null ? data : new T();
         }
 
-        public async UniTask SaveAsync(Uri uri, IEnumerable<byte> data, CancellationToken cancellationToken = default)
+        public async UniTask SaveAsync(Uri uri, T data, CancellationToken cancellationToken = default)
         {
             if (await asyncCRUDHandler.ExistsAsync(uri, cancellationToken))
             {
-                await asyncCRUDHandler.UpdateAsync(uri, data, cancellationToken);
+                await asyncCRUDHandler.UpdateAsync(uri, dataSerializer.Deserialize(data), cancellationToken);
             }
             else
             {
-                await asyncCRUDHandler.CreateAsync(uri, data, cancellationToken);
+                await asyncCRUDHandler.CreateAsync(uri, dataSerializer.Deserialize(data), cancellationToken);
             }
         }
 

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using CAFU.Data.Repository;
 using UniRx;
@@ -8,21 +6,21 @@ using UniRx.Async;
 
 namespace CAFU.Data.DataSource
 {
-    public class WebRequest : IAsyncCRUDHandler
+    internal sealed class WebRequest : IAsyncCRUDHandler
     {
-        public async UniTask CreateAsync(Uri uri, IEnumerable<byte> data, CancellationToken cancellationToken = default)
+        public async UniTask CreateAsync(Uri uri, byte[] data, CancellationToken cancellationToken = default)
         {
-            await ObservableUnityWebRequest.PutAsObservable(uri.ToString(), data.ToArray()).ToUniTask(cancellationToken);
+            await ObservableUnityWebRequest.PutAsObservable(uri.ToString(), data).ToUniTask(cancellationToken);
         }
 
-        public async UniTask<IEnumerable<byte>> ReadAsync(Uri uri, CancellationToken cancellationToken = default)
+        public async UniTask<byte[]> ReadAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             return await ObservableUnityWebRequest.GetBytesAsObservable(uri.ToString()).ToUniTask(cancellationToken);
         }
 
-        public async UniTask UpdateAsync(Uri uri, IEnumerable<byte> data, CancellationToken cancellationToken = default)
+        public async UniTask UpdateAsync(Uri uri, byte[] data, CancellationToken cancellationToken = default)
         {
-            await ObservableUnityWebRequest.PutAsObservable(uri.ToString(), data.ToArray()).ToUniTask(cancellationToken);
+            await ObservableUnityWebRequest.PutAsObservable(uri.ToString(), data).ToUniTask(cancellationToken);
         }
 
         public async UniTask DeleteAsync(Uri uri, CancellationToken cancellationToken = default)

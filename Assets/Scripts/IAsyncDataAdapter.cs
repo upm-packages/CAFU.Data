@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using UniRx.Async;
 
 namespace CAFU.Data
 {
-    public interface IAsyncDataAdapter
+    public interface IAsyncDataAdapter<T>
     {
-        UniTask<IEnumerable<byte>> LoadAsync(Uri uri, CancellationToken cancellationToken = default);
-        UniTask SaveAsync(Uri uri, IEnumerable<byte> data, CancellationToken cancellationToken = default);
+        UniTask<T> LoadAsync(Uri uri, CancellationToken cancellationToken = default);
+        UniTask SaveAsync(Uri uri, T data, CancellationToken cancellationToken = default);
         UniTask DeleteAsync(Uri uri, CancellationToken cancellationToken = default);
         UniTask<bool> ExistsAsync(Uri uri, CancellationToken cancellationToken = default);
     }
