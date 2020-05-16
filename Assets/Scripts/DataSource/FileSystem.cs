@@ -1,16 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using CAFU.Data.Repository;
 using UniRx.Async;
 
 namespace CAFU.Data.DataSource
 {
-    public class FileSystem : IAsyncCRUDHandler
+    internal sealed class FileSystem : IAsyncCRUDHandler
     {
-        public async UniTask CreateAsync(Uri uri, IEnumerable<byte> data, CancellationToken cancellationToken = default)
+        public async UniTask CreateAsync(Uri uri, byte[] data, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -23,12 +21,12 @@ namespace CAFU.Data.DataSource
 
             using (var stream = new FileStream(GetUnescapedAbsolutePath(uri), FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                var enumerable = data as byte[] ?? data.ToArray();
-                await stream.WriteAsync(enumerable, 0, enumerable.Length, cancellationToken);
+                data = data ?? new byte[0];
+                await stream.WriteAsync(data, 0, data.Length, cancellationToken);
             }
         }
 
-        public async UniTask<IEnumerable<byte>> ReadAsync(Uri uri, CancellationToken cancellationToken = default)
+        public async UniTask<byte[]> ReadAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -45,7 +43,7 @@ namespace CAFU.Data.DataSource
             }
         }
 
-        public async UniTask UpdateAsync(Uri uri, IEnumerable<byte> data, CancellationToken cancellationToken = default)
+        public async UniTask UpdateAsync(Uri uri, byte[] data, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -56,8 +54,8 @@ namespace CAFU.Data.DataSource
 
             using (var stream = new FileStream(GetUnescapedAbsolutePath(uri), FileMode.Truncate, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                var enumerable = data as byte[] ?? data.ToArray();
-                await stream.WriteAsync(enumerable, 0, enumerable.Length, cancellationToken);
+                data = data ?? new byte[0];
+                await stream.WriteAsync(data, 0, data.Length, cancellationToken);
             }
         }
 

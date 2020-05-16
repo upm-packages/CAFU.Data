@@ -1,11 +1,13 @@
 using System;
+using CAFU.Data.DataSerializer;
 using CAFU.Data.DataSource;
 using CAFU.Data.Repository;
 using Zenject;
 
 namespace CAFU.Data.Installer
 {
-    public class DataAdapterInstaller : Installer<DataSourceType, DataAdapterInstaller>
+    public class DataAdapterInstaller<T> : Installer<DataSourceType, DataAdapterInstaller<T>>
+        where T : new()
     {
         private readonly DataSourceType dataSourceType;
 
@@ -16,7 +18,27 @@ namespace CAFU.Data.Installer
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<AsyncDataRepository>().AsSingle();
+            DataAdapterInstaller<T, JsonUtility<T>>.Install(Container, dataSourceType, JsonUtility<T>.Default);
+        }
+    }
+
+    public class DataAdapterInstaller<T, TDataSerializer> : Installer<DataSourceType, TDataSerializer, DataAdapterInstaller<T, TDataSerializer>>
+        where T : new()
+        where TDataSerializer : IDataSerializer<T>
+    {
+        private readonly DataSourceType dataSourceType;
+        private readonly TDataSerializer dataSerializer;
+
+        public DataAdapterInstaller(DataSourceType dataSourceType, TDataSerializer dataSerializer)
+        {
+            this.dataSourceType = dataSourceType;
+            this.dataSerializer = dataSerializer;
+        }
+
+        public override void InstallBindings()
+        {
+            Container.BindInterfacesTo<AsyncDataRepository<T>>().AsSingle();
+            Container.Bind<IDataSerializer<T>>().FromInstance(dataSerializer).AsSingle();
             switch (dataSourceType)
             {
                 case DataSourceType.FileSystem:
