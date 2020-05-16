@@ -1,0 +1,22 @@
+{
+  "scopedRegistries": [
+    {
+      "name": "Unofficial Unity Package Manager Registry",
+      "url": "https://upm-packages.dev",
+      "scopes": [
+        "com.google",
+        "com.unity.simpleanimation",
+        "com.stevevermeulen",
+        "jp.cysharp",
+        "dev.monry",
+        "dev.upm-packages"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.stevevermeulen.extenject": "9.1.0",
+    "jp.cysharp.unirx": "7.1.0",
+    "jp.cysharp.unitask": "1.0.0",
+    "dev.upm-packages.unirx-observableunitywebrequest": "1.0.0"
+  }
+}
