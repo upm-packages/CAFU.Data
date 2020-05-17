@@ -37,25 +37,27 @@ namespace CAFU.Data.Installer
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesTo<AsyncDataRepository<T>>().AsSingle();
-            Container.Bind<IDataSerializer<T>>().FromInstance(dataSerializer).AsSingle();
-            switch (dataSourceType)
-            {
-                case DataSourceType.FileSystem:
-                    if (!Container.HasBinding<FileSystem>())
+            Container
+                .Bind<IAsyncDataAdapter<T>>()
+                .FromSubContainerResolve()
+                .ByMethod(
+                    subContainer =>
                     {
-                        Container.BindInterfacesAndSelfTo<FileSystem>().AsSingle();
+                        subContainer.BindInterfacesTo<AsyncDataRepository<T>>().AsSingle();
+                        subContainer.Bind<IDataSerializer<T>>().FromInstance(dataSerializer).AsSingle();
+                        switch (dataSourceType)
+                        {
+                            case DataSourceType.FileSystem:
+                                Container.BindInterfacesTo<FileSystem>().AsSingle();
+                                break;
+                            case DataSourceType.WebRequest:
+                                Container.BindInterfacesTo<WebRequest>().AsSingle();
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
-                    break;
-                case DataSourceType.WebRequest:
-                    if (!Container.HasBinding<WebRequest>())
-                    {
-                        Container.BindInterfacesAndSelfTo<WebRequest>().AsSingle();
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                ).AsSingle();
         }
     }
 }
