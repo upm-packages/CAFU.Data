@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-preview.4] - 2020-05-17
+
+Fix error on inject multiple times
+
+### Fixes
+
+- #2 利用する Container を正しく SubContainer にする
+
 ## [1.0.0-preview.3] - 2020-05-17
 
 Fix error on inject multiple times
