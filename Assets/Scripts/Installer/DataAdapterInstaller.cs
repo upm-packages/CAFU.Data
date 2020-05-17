@@ -42,10 +42,16 @@ namespace CAFU.Data.Installer
             switch (dataSourceType)
             {
                 case DataSourceType.FileSystem:
-                    Container.BindInterfacesTo<FileSystem>().AsSingle();
+                    if (!Container.HasBinding<FileSystem>())
+                    {
+                        Container.BindInterfacesAndSelfTo<FileSystem>().AsSingle();
+                    }
                     break;
                 case DataSourceType.WebRequest:
-                    Container.BindInterfacesTo<WebRequest>().AsSingle();
+                    if (!Container.HasBinding<WebRequest>())
+                    {
+                        Container.BindInterfacesAndSelfTo<WebRequest>().AsSingle();
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
