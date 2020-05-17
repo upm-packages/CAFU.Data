@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-preview.3] - 2020-05-17
+
+Fix error on inject multiple times
+
+### Fixes
+
+-  #2 DataAdapterInstaller を複数箇所で使用すると Inject のエラー
+
 ## [1.0.0-preview.2] - 2020-05-16
 
 Add Serialize/Deserialize
