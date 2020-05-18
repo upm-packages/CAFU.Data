@@ -52,4 +52,53 @@ namespace CAFU.Data.Repository
             return await asyncCRUDHandler.ExistsAsync(uri, cancellationToken);
         }
     }
+
+    internal sealed class DataRepository<T> : IDataAdapter<T>
+        where T : new()
+    {
+        private readonly ICRUDHandler crudHandler;
+        private readonly IDataSerializer<T> dataSerializer;
+
+        public DataRepository(ICRUDHandler crudHandler, IDataSerializer<T> dataSerializer)
+        {
+            this.crudHandler = crudHandler;
+            this.dataSerializer = dataSerializer;
+        }
+
+        public T Load(Uri uri)
+        {
+            T data = default;
+            if (crudHandler.Exists(uri))
+            {
+                data = dataSerializer.Serialize(crudHandler.Read(uri));
+            }
+
+            return data != null ? data : new T();
+        }
+
+        public void Save(Uri uri, T data)
+        {
+            if (crudHandler.Exists(uri))
+            {
+                crudHandler.Update(uri, dataSerializer.Deserialize(data));
+            }
+            else
+            {
+                crudHandler.Create(uri, dataSerializer.Deserialize(data));
+            }
+        }
+
+        public void Delete(Uri uri)
+        {
+            if (crudHandler.Exists(uri))
+            {
+                crudHandler.Delete(uri);
+            }
+        }
+
+        public bool Exists(Uri uri)
+        {
+            return crudHandler.Exists(uri);
+        }
+    }
 }
