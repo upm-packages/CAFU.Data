@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-preview.7] - 2020-05-18
+
+Add overload to omit arguments
+
+### Features
+
+- 引数を省略するためのオーバーロードを追加
+
 ## [1.0.0-preview.6] - 2020-05-18
 
 Add classes for synchronize
