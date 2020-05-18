@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using CAFU.Data.DataSerializer;
 using CAFU.Data.DataSource;
 using CAFU.Data.Repository;
+using JetBrains.Annotations;
 using Zenject;
 
 namespace CAFU.Data.Installer
 {
+    [PublicAPI]
     public sealed class DataAdapterInstaller<T> : Installer<DataSourceType, SynchronizeMode, DataAdapterInstaller<T>>
         where T : new()
     {
@@ -21,11 +23,22 @@ namespace CAFU.Data.Installer
 
         public override void InstallBindings()
         {
-            DataAdapterInstaller<T, JsonUtility<T>>.Install(Container, dataSourceType, synchronizeMode, JsonUtility<T>.Default);
+            DataAdapterInstaller<T, JsonUtility<T>>.Install(Container, JsonUtility<T>.Default, dataSourceType, synchronizeMode);
+        }
+
+        public static void Install(DiContainer container)
+        {
+            Install(container, DataSourceType.FileSystem, SynchronizeMode.Async);
+        }
+
+        public static void Install(DiContainer container, DataSourceType dataSourceType)
+        {
+            Install(container, dataSourceType, SynchronizeMode.Async);
         }
     }
 
-    public sealed class DataAdapterInstaller<T, TDataSerializer> : Installer<DataSourceType, SynchronizeMode, TDataSerializer, DataAdapterInstaller<T, TDataSerializer>>
+    [PublicAPI]
+    public sealed class DataAdapterInstaller<T, TDataSerializer> : Installer<TDataSerializer, DataSourceType, SynchronizeMode, DataAdapterInstaller<T, TDataSerializer>>
         where T : new()
         where TDataSerializer : IDataSerializer<T>
     {
@@ -66,6 +79,16 @@ namespace CAFU.Data.Installer
                         subContainer.BindInterfacesTo(TypeMap.DataSource[(dataSourceType, synchronizeMode)]).AsSingle();
                     }
                 ).AsSingle();
+        }
+
+        public static void Install(DiContainer container, TDataSerializer dataSerializer)
+        {
+            Install(container, dataSerializer, DataSourceType.FileSystem, SynchronizeMode.Async);
+        }
+
+        public static void Install(DiContainer container, TDataSerializer dataSerializer, DataSourceType dataSourceType)
+        {
+            Install(container, dataSerializer, dataSourceType, SynchronizeMode.Async);
         }
     }
 
