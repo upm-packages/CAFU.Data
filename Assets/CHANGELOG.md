@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-preview.6] - 2020-05-18
+
+Add classes for synchronize
+
+### Features
+
+- 同期処理としてファイルの読み書きを行うためのクラスを追加
+
 ## [1.0.0-preview.5] - 2020-05-17
 
 Remove unnecessary dependencies
