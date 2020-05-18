@@ -6,7 +6,9 @@ using UniRx.Async;
 
 namespace CAFU.Data.DataSource
 {
-    internal sealed class WebRequest : IAsyncCRUDHandler
+    // WebRequest の同期版は提供しない
+
+    internal sealed class AsyncWebRequest : IAsyncCRUDHandler
     {
         public async UniTask CreateAsync(Uri uri, byte[] data, CancellationToken cancellationToken = default)
         {
