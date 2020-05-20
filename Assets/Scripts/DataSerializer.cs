@@ -7,14 +7,14 @@ namespace CAFU.Data.DataSerializer
     {
         public static JsonUtility<T> Default { get; } = new JsonUtility<T>();
 
-        public T Serialize(byte[] data)
-        {
-            return JsonUtility.FromJson<T>(Encoding.UTF8.GetString(data));
-        }
-
-        public byte[] Deserialize(T data)
+        public byte[] Serialize(T data)
         {
             return Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
+        }
+
+        public T Deserialize(byte[] data)
+        {
+            return JsonUtility.FromJson<T>(Encoding.UTF8.GetString(data));
         }
     }
 }
