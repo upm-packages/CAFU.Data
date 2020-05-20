@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0-preview.8] - 2020-05-20
+
+Inverse terms between serialize, and deserialize
+
+* Inverse terms between serialize, and deserialize #9 
+
 ## [1.0.0-preview.7] - 2020-05-18
 
 Add overload to omit arguments
