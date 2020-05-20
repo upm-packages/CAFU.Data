@@ -21,7 +21,7 @@ namespace CAFU.Data.Repository
             T data = default;
             if (await asyncCRUDHandler.ExistsAsync(uri, cancellationToken))
             {
-                data = dataSerializer.Serialize(await asyncCRUDHandler.ReadAsync(uri, cancellationToken));
+                data = dataSerializer.Deserialize(await asyncCRUDHandler.ReadAsync(uri, cancellationToken));
             }
 
             return data != null ? data : new T();
@@ -31,11 +31,11 @@ namespace CAFU.Data.Repository
         {
             if (await asyncCRUDHandler.ExistsAsync(uri, cancellationToken))
             {
-                await asyncCRUDHandler.UpdateAsync(uri, dataSerializer.Deserialize(data), cancellationToken);
+                await asyncCRUDHandler.UpdateAsync(uri, dataSerializer.Serialize(data), cancellationToken);
             }
             else
             {
-                await asyncCRUDHandler.CreateAsync(uri, dataSerializer.Deserialize(data), cancellationToken);
+                await asyncCRUDHandler.CreateAsync(uri, dataSerializer.Serialize(data), cancellationToken);
             }
         }
 
@@ -70,7 +70,7 @@ namespace CAFU.Data.Repository
             T data = default;
             if (crudHandler.Exists(uri))
             {
-                data = dataSerializer.Serialize(crudHandler.Read(uri));
+                data = dataSerializer.Deserialize(crudHandler.Read(uri));
             }
 
             return data != null ? data : new T();
@@ -80,11 +80,11 @@ namespace CAFU.Data.Repository
         {
             if (crudHandler.Exists(uri))
             {
-                crudHandler.Update(uri, dataSerializer.Deserialize(data));
+                crudHandler.Update(uri, dataSerializer.Serialize(data));
             }
             else
             {
-                crudHandler.Create(uri, dataSerializer.Deserialize(data));
+                crudHandler.Create(uri, dataSerializer.Serialize(data));
             }
         }
 
