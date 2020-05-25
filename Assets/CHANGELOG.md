@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-preview.9] - 2020-05-25
+
+Add support to WebGL
+
+### Features
+
+- Use `UnityEngine.PlayerPrefs` (IndexedDB) instead of `System.IO.File` #10 
+
 ## [1.0.0-preview.8] - 2020-05-20
 
 Inverse terms between serialize, and deserialize
