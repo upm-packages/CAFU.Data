@@ -13,10 +13,8 @@
   "keywords": [],
   "category": "",
   "dependencies": {
-    "com.stevevermeulen.extenject": "9.1.0",
-    "jp.cysharp.unirx": "7.1.0",
-    "jp.cysharp.unitask": "1.0.0",
-    "dev.upm-packages.unirx-observableunitywebrequest": "1.0.1"
+    "com.stevevermeulen.extenject": "9.1.3",
+    "dev.upm-packages.unirx-observableunitywebrequest": "1.1.1"
   },
   "repository": {
     "type": "git",
