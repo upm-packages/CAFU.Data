@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-preview.10] - 2021-01-21
+
+Reference UniRx on GitHub instead of Self-hosted registry
+
+### Changes
+
+- Reference UniRx on GitHub instead of Self-hosted registry
+- Upgrade UniTask v2
+
 ## [1.0.0-preview.9] - 2020-05-25
 
 Add support to WebGL
