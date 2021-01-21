@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using UniRx.Async;
+using Cysharp.Threading.Tasks;
 
 namespace CAFU.Data
 {
