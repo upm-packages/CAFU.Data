@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using CAFU.Data.Repository;
-using UniRx.Async;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CAFU.Data.DataSource
